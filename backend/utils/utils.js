@@ -1,7 +1,7 @@
-const DocumentNotFoundException = class extends Error {
+const DocumentNotFoundError = class extends Error {
   constructor(message) {
     super(message);
-    this.name = 'DocumentError';
+    this.status = 404;
   }
 };
 
@@ -16,6 +16,6 @@ const handleError = (error, response) => {
 };
 
 module.exports = {
-  DocumentNotFoundException,
+  DocumentNotFoundError,
   handleError
 };

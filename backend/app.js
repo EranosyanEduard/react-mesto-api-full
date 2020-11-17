@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { createUser, login } = require('./controllers/users');
+const DocumentNotFoundError = require('./errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
 
@@ -25,8 +26,11 @@ app.use(require('./middlewares/auth'));
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.use((_, response) => {
-  response.status(404).send({ message: 'Данный ресурс не найден!' });
+app.use((req, res) => {
+  const { status, message } = new DocumentNotFoundError('Данный ресурс не найден!');
+  res.status(status).send({ message });
 });
+
+app.use(require('./middlewares/error'));
 
 app.listen(PORT);

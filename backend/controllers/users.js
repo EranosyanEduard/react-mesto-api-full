@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { DocumentNotFoundException, handleError } = require('../utils/utils');
+const { DocumentNotFoundError, handleError } = require('../utils/utils');
 
 const createUser = (request, response) => {
   const { password, link, ...otherProps } = request.body;
@@ -22,7 +22,7 @@ const createUser = (request, response) => {
 
 const getCurrentUser = (request, response) => {
   User.findById(request.user._id)
-    .orFail(() => new DocumentNotFoundException('User document not found'))
+    .orFail(() => new DocumentNotFoundError('User document not found'))
     .then((user) => {
       response.send(user);
     })
@@ -61,7 +61,7 @@ const handleUpdateUser = (userId, updateObject, response) => {
     new: true,
     runValidators: true
   })
-    .orFail(() => new DocumentNotFoundException('User document not found'))
+    .orFail(() => new DocumentNotFoundError('User document not found'))
     .then((user) => {
       response.send(user);
     })
