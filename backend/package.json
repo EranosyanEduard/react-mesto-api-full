@@ -1,0 +1,36 @@
+{
+  "name": "express-mesto",
+  "version": "1.0.0",
+  "description": "learning backend development",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EranosyanEduard/express-mesto.git"
+  },
+  "keywords": [],
+  "author": "Eranosyan Eduard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EranosyanEduard/express-mesto/issues"
+  },
+  "homepage": "https://github.com/EranosyanEduard/express-mesto#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.6",
+    "validator": "^13.1.17"
+  }
+}

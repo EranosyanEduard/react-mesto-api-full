@@ -1,0 +1,10 @@
+# dependencies
+/backend/node_modules
+
+# misc
+*.env
+
+# editor
+/.editorconfig
+/.idea
+/backend/.eslintrc
