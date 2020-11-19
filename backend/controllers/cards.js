@@ -1,70 +1,66 @@
 const Card = require('../models/card');
-const { DocumentNotFoundException, handleError } = require('../utils/utils');
+const { ForbiddenError, NotFoundError } = require('../errors/errors');
 
-const createCard = (request, response) => {
+const createCard = (request, response, next) => {
   const { body, user } = request;
-  Card.create({ ...body, owner: user._id })
+  Card.create({
+    ...body,
+    owner: user._id
+  })
     .then((card) => {
       response.send(card);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+    .catch(next);
 };
 
-const getCards = (_, response) => {
+const getCards = (_, response, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
     .then((cards) => {
       response.send(cards);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+    .catch(next);
 };
 
-const removeCard = (request, response) => {
+const removeCard = (request, response, next) => {
   const { params, user } = request;
   Card.findById(params.cardId)
-    .orFail(() => new DocumentNotFoundException('Card document not found'))
+    .orFail(() => new NotFoundError('Карточка не найдена!'))
     .populate(['owner', 'likes'])
     .then((card) => {
-      const errorMessage = 'Ошибка при удалении документа Card!';
-      if (card.owner === user._id) {
-        return Card.deleteOne({ id: card._id })
-          .then(() => card)
-          .catch(() => new Error(errorMessage));
+      const errorMessage = 'При попытке удаления карточки произошла ошибка!';
+      if (card.owner._id.toString() === user._id) {
+        return Card.deleteOne({ _id: card._id })
+          .orFail(() => new Error(errorMessage))
+          .then(() => card);
       }
-      return Promise.reject(new Error(errorMessage));
+      return Promise.reject(new ForbiddenError(errorMessage));
     })
     .then((card) => {
       response.send(card);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+    .catch(next);
 };
 
-const handleLike = (cardId, updateObject, response) => {
+const handleLike = (cardId, updateObject, response) => (
   Card.findByIdAndUpdate(cardId, updateObject, { new: true })
-    .orFail(() => new DocumentNotFoundException('Card document not found'))
+    .orFail(() => new NotFoundError('Карточка не найдена!'))
     .populate(['owner', 'likes'])
     .then((card) => {
       response.send(card);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
-};
+);
 
-const dislikeCard = (request, response) => {
+const dislikeCard = (request, response, next) => {
   const updateObject = { $pull: { likes: request.user._id } };
-  handleLike(request.params.cardId, updateObject, response);
+  handleLike(request.params.cardId, updateObject, response)
+    .catch(next);
 };
 
-const likeCard = (request, response) => {
+const likeCard = (request, response, next) => {
   const updateObject = { $addToSet: { likes: request.user._id } };
-  handleLike(request.params.cardId, updateObject, response);
+  handleLike(request.params.cardId, updateObject, response)
+    .catch(next);
 };
 
 module.exports = {

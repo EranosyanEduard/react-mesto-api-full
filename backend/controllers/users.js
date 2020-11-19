@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { DocumentNotFoundError, handleError } = require('../utils/utils');
+const { NotFoundError } = require('../errors/errors');
 
-const createUser = (request, response) => {
+const createUser = (request, response, next) => {
   const { password, link, ...otherProps } = request.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
@@ -15,33 +15,27 @@ const createUser = (request, response) => {
     .then((user) => {
       response.send(user);
     })
-    .catch((error) => {
-      handleError(error, response, 'createUser');
-    });
+    .catch(next);
 };
 
-const getCurrentUser = (request, response) => {
+const getCurrentUser = (request, response, next) => {
   User.findById(request.user._id)
-    .orFail(() => new DocumentNotFoundError('User document not found'))
+    .orFail(() => new NotFoundError('Пользователь не найден!'))
     .then((user) => {
       response.send(user);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+    .catch(next);
 };
 
-const getUsers = (_, response) => {
+const getUsers = (_, response, next) => {
   User.find({})
     .then((users) => {
       response.send(users);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+    .catch(next);
 };
 
-const login = (request, response) => {
+const login = (request, response, next) => {
   User.findUserByCredentials(request.body)
     .then((user) => {
       const token = jwt.sign(
@@ -51,33 +45,40 @@ const login = (request, response) => {
       );
       response.send({ token });
     })
-    .catch((error) => {
-      response.status(401).send({ error: error.message });
-    });
+    .catch(next);
 };
 
-const handleUpdateUser = (userId, updateObject, response) => {
+const handleUpdateUser = (userId, updateObject, response) => (
   User.findByIdAndUpdate(userId, updateObject, {
     new: true,
     runValidators: true
   })
-    .orFail(() => new DocumentNotFoundError('User document not found'))
+    .orFail(() => new NotFoundError('Пользователь не найден!'))
     .then((user) => {
       response.send(user);
     })
-    .catch((error) => {
-      handleError(error, response);
-    });
+);
+
+const updateAvatar = (request, response, next) => {
+  handleUpdateUser(
+    request.user._id,
+    { avatar: request.body.link },
+    response
+  )
+    .catch(next);
 };
 
-const updateAvatar = (request, response) => {
-  const { link } = request.body;
-  handleUpdateUser(request.user._id, { avatar: link }, response);
-};
-
-const updateUser = (request, response) => {
+const updateUser = (request, response, next) => {
   const { name, about } = request.body;
-  handleUpdateUser(request.user._id, { name, about }, response);
+  handleUpdateUser(
+    request.user._id,
+    {
+      name,
+      about
+    },
+    response
+  )
+    .catch(next);
 };
 
 module.exports = {

@@ -13,7 +13,7 @@ const cardSchema = new Schema({
     required: true,
     validate: {
       validator: (url) => validator.isURL(url),
-      message: 'cardSchema: невалидное значение поля link'
+      message: 'невалидное значение поля схемы cardSchema'
     }
   },
   owner: {

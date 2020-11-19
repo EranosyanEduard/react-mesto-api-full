@@ -1,12 +1,14 @@
-const handleError = (error, _, response) => {
-  const { status = 500, message } = error;
+const errorGeneralHandler = (error, request, response, _) => {
+  const { message, name, statusCode = 500 } = error;
+  const errorMessage = (statusCode !== 500)
+    ? message
+    : 'На сервере произошла непредвиденная ошибка!';
   response
-    .status(status)
+    .status(statusCode)
     .send({
-      message: (status !== 500)
-        ? message
-        : 'На сервере произошла непредвиденная ошибка!'
+      errorName: name,
+      errorMessage
     });
 };
 
-module.exports = handleError;
+module.exports = errorGeneralHandler;

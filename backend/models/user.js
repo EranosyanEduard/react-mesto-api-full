@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const { UnauthorizedError } = require('../errors/errors');
 
 const userSchema = new Schema({
   name: {
@@ -20,7 +21,7 @@ const userSchema = new Schema({
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
       validator: (url) => validator.isURL(url),
-      message: 'userSchema: невалидное значение поля avatar'
+      message: 'невалидное значение поля схемы userSchema'
     }
   },
   email: {
@@ -29,7 +30,7 @@ const userSchema = new Schema({
     unique: true,
     validate: {
       validator: (email) => validator.isEmail(email),
-      message: 'userSchema: невалидное значение поля email'
+      message: 'невалидное значение поля схемы userSchema'
     }
   },
   password: {
@@ -41,19 +42,18 @@ const userSchema = new Schema({
 
 userSchema.statics.findUserByCredentials = function ({ email, password }) {
   const errorMessage = 'Недопустимое значение одного из полей!';
-  return this.findOne({ email }).select('+password')
-    .then((user) => {
-      if (user) {
-        return bcrypt.compare(password, user.password)
-          .then((matched) => {
-            if (matched) {
-              return user;
-            }
-            return Promise.reject(new Error(errorMessage));
-          });
-      }
-      return Promise.reject(new Error(errorMessage));
-    });
+  return this.findOne({ email })
+    .select('+password')
+    .orFail(() => new UnauthorizedError(errorMessage))
+    .then((user) => (
+      bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (matched) {
+            return user;
+          }
+          return Promise.reject(new UnauthorizedError(errorMessage));
+        })
+    ));
 };
 
 module.exports = model('user', userSchema);

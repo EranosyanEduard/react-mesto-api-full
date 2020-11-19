@@ -1,9 +1,10 @@
-require('dotenv').config();
+require('dotenv')
+  .config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { createUser, login } = require('./controllers/users');
-const DocumentNotFoundError = require('./errors/not-found-error');
+const { NotFoundError } = require('./errors/errors');
 
 const { PORT = 3000 } = process.env;
 
@@ -25,12 +26,14 @@ app.post('/signup', createUser);
 app.use(require('./middlewares/auth'));
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
-
-app.use((req, res) => {
-  const { status, message } = new DocumentNotFoundError('Данный ресурс не найден!');
-  res.status(status).send({ message });
+// undefined route:
+app.all('*', (req, res, next) => {
+  next(new NotFoundError('Данный ресурс не найден!'));
 });
 
+// error general handler:
 app.use(require('./middlewares/error'));
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log('Сервер запущен');
+});
