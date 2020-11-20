@@ -1,13 +1,19 @@
-require('dotenv')
-  .config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const celebrate = require('celebrate');
+const dotenv = require('dotenv');
 const { createUser, login } = require('./controllers/users');
 const { NotFoundError } = require('./errors/errors');
+const {
+  celebrateUserCreation,
+  celebrateUserLogin,
+  celebrateUserAuthorization
+} = require('./middlewares/validator');
+const { errorLogger, requestLogger } = require('./middlewares/logger');
 
+dotenv.config();
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -19,18 +25,23 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requestLogger);
+
 // unprotected routes:
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrateUserLogin(), login);
+app.post('/signup', celebrateUserCreation(), createUser);
 // protected routes:
-app.use(require('./middlewares/auth'));
+app.use(celebrateUserAuthorization(), require('./middlewares/auth'));
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
-// undefined route:
+// undefined routes:
 app.all('*', (req, res, next) => {
   next(new NotFoundError('Данный ресурс не найден!'));
 });
 
+app.use(errorLogger);
+
+app.use(celebrate.errors());
 // error general handler:
 app.use(require('./middlewares/error'));
 

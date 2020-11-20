@@ -1,0 +1,33 @@
+.header {
+  border-bottom: 1px solid rgba(84, 84, 84, .7);
+  height: 17.5vw;
+  max-height: 74px;
+  /* Grid container: */
+  display: grid;
+  grid-template: min-content 1fr / fit-content(142px) 1fr min-content;
+  grid-template-areas:
+    'image space login'
+    'image space button';
+  align-items: start;
+  justify-items: end;
+  row-gap: 10px;
+  /* Text appearance: */
+  color: #fff;
+  font: 14px/1.2 Inter;
+}
+
+@media screen and (min-width: 667px) {
+  .header {
+    /* Grid container: */
+    grid-template: 1fr / fit-content(142px) 1fr min-content;
+    grid-template-areas: 'image login button';
+    align-items: baseline;
+    gap: 0 25px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .header {
+    font-size: 18px;
+  }
+}

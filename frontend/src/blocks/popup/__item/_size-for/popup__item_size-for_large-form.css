@@ -1,0 +1,6 @@
+.popup__item_size-for_large-form {
+  height: 80vmin;
+  max-height: 330px;
+  width: 75%;
+  max-width: 430px;
+}

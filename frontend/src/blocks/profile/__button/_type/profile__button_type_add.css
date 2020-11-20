@@ -1,0 +1,13 @@
+.profile__button_type_add {
+  background-image: url(../../../../images/profile/add-button.svg);
+  height: 50px;
+  width: 100%;
+  max-width: 250px;
+}
+
+@media screen and (min-width: 667px) {
+  .profile__button_type_add {
+    grid-area: addButton;
+    max-width: 100%;
+  }
+}

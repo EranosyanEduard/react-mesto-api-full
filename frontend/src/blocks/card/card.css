@@ -1,0 +1,13 @@
+.card {
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  /* Grid container: */
+  display: grid;
+  grid-template: 78.12% repeat(2, 1fr) / 15px 1fr 20px 15px;
+  grid-template-areas:
+    'image image image image'
+    'paddingLeft heading button paddingRight'
+    'paddingLeft heading counter paddingRight';
+  justify-items: center;
+}

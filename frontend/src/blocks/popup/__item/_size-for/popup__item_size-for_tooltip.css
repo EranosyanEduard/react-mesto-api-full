@@ -1,0 +1,6 @@
+.popup__item_size-for_tooltip {
+  height: 96.25vmin;
+  max-height: 330px;
+  width: 87.5%;
+  max-width: 430px;
+}

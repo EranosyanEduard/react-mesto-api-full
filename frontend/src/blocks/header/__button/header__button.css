@@ -1,0 +1,21 @@
+.header__button {
+  /* Reset default styles: */
+  border: none;
+  padding: 0;
+  background: initial;
+  /* Grid item: */
+  grid-area: button;
+  /* Text appearance: */
+  color: inherit;
+  font: inherit;
+  transition: opacity .5s;
+}
+
+.header__button:focus {
+  outline: none;
+}
+
+.header__button:hover {
+  cursor: pointer;
+  opacity: .6;
+}

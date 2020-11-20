@@ -1,0 +1,35 @@
+.profile__figure {
+  /* Reset default styles: */
+  margin: 0;
+  /* Size: */
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.profile__figure::before {
+  content: '';
+  /* Position: */
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* Size: */
+  height: 100%;
+  width: 100%;
+  /* Background: */
+  background: no-repeat center;
+  transition: background .5s;
+}
+
+.profile__figure:hover::before {
+  background-color: rgba(0, 0, 0, .8);
+  background-image: url(../../../images/profile/edit-button-image.svg);
+  cursor: pointer;
+}
+
+@media screen and (min-width: 667px) {
+  .profile__figure {
+    grid-area: figure;
+  }
+}

@@ -1,0 +1,21 @@
+.popup {
+  /* Position: */
+  position: fixed;
+  left: 0;
+  top: 0;
+  /* Size: */
+  height: 100%;
+  width: 100%;
+  /* Grid container: */
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  /* Animation: */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s, visibility .5s;
+}
+
+.popup:focus {
+  outline: none;
+}

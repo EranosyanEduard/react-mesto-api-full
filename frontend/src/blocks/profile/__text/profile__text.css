@@ -1,0 +1,10 @@
+.profile__text {
+  /* Reset default styles: */
+  margin: 0;
+  /* Text appearance: */
+  color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

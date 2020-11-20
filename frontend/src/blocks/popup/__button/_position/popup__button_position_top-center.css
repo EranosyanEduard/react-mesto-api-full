@@ -1,0 +1,11 @@
+.popup__button_position_top-center {
+  left: calc(50% - var(--popup-closeButton-size-min) / 2);
+  top: calc(var(--popup-closeButton-size-min) * -1);
+}
+
+@media screen and (min-width: 568px) {
+  .popup__button_position_top-center {
+    left: calc(50% - var(--popup-closeButton-size-max) / 2);
+    top: calc(var(--popup-closeButton-size-max) * -1);
+  }
+}

@@ -1,0 +1,12 @@
+.tooltip {
+  background: #fff;
+  border-radius: 10px;
+  /* Size: */
+  height: 100%;
+  width: 100%;
+  /* Flex container: */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}

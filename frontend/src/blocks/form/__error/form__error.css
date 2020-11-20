@@ -1,0 +1,7 @@
+.form__error {
+  color: #f00;
+  display: block;
+  min-height: 15px;
+  padding: 0 5px;
+  font: 12px/1.25 Inter;
+}

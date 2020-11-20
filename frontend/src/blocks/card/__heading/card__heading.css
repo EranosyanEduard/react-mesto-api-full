@@ -1,0 +1,13 @@
+.card__heading {
+  margin: 0;
+  max-width: 200px;
+  /* Grid item: */
+  grid-area: heading;
+  align-self: center;
+  justify-self: start;
+  /* Text appearance: */
+  font: 900 24px/1.2 Inter;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

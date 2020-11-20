@@ -1,0 +1,6 @@
+.popup__item_size-for_small-form {
+  height: 75vmin;
+  max-height: 270px;
+  width: 75%;
+  max-width: 430px;
+}

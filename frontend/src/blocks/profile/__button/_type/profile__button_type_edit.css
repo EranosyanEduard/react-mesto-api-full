@@ -1,0 +1,12 @@
+.profile__button_type_edit {
+  background-image: url(../../../../images/profile/edit-button-info.svg);
+  height: 18px;
+  width: 18px;
+}
+
+@media screen and (min-width: 1000px) {
+  .profile__button_type_edit {
+    height: 24px;
+    width: 24px;
+  }
+}

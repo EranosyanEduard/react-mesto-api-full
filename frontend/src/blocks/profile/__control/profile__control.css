@@ -1,0 +1,14 @@
+.profile__control {
+  /* Grid container: */
+  display: grid;
+  grid-template-columns: 1fr 25px;
+  align-items: center;
+  column-gap: 15px;
+}
+
+@media screen and (min-width: 667px) {
+  .profile__control {
+    grid-area: controlPanel;
+    grid-template-columns: fit-content(100%) 25px;
+  }
+}

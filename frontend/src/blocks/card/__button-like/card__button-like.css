@@ -1,0 +1,25 @@
+.card__button-like {
+  /* Reset default styles: */
+  border: none;
+  padding: 0;
+  /* Grid item: */
+  grid-area: button;
+  align-self: end;
+  /* Background: */
+  background: url(../../../images/card/like-button.svg) no-repeat;
+  background-size: contain;
+  /* Size: */
+  height: 20px;
+  width: 20px;
+  transition: transform .5s, opacity .5s;
+}
+
+.card__button-like:focus {
+  outline: none;
+}
+
+.card__button-like:hover {
+  cursor: pointer;
+  opacity: .6;
+  transform: scale(1.2);
+}

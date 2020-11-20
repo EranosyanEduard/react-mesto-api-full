@@ -1,0 +1,17 @@
+.sign__item_type_link {
+  color: #fff;
+  font: 12px/1.2 Inter;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity .5s;
+}
+
+.sign__item_type_link:hover {
+  opacity: .6;
+}
+
+@media screen and (min-width: 667px) {
+  .sign__item_type_link {
+    font-size: 14px;
+  }
+}

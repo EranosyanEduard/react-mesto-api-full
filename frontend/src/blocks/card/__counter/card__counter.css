@@ -1,0 +1,6 @@
+.card__counter {
+  /* Grid item: */
+  grid-area: counter;
+  align-self: start;
+  font: 13px/1.2 Inter;
+}

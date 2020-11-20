@@ -1,0 +1,9 @@
+.sign {
+  /* Size: */
+  height: 100%;
+  width: 100%;
+  /* Grid container: */
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  justify-items: center;
+}

@@ -1,0 +1,30 @@
+.page {
+  background: #000;
+  box-sizing: border-box;
+  /* Size: */
+  min-height: 100vh;
+  width: 100%;
+  min-width: 300px;
+  /* Padding: */
+  padding-top: 25px;
+  padding-bottom: 30px;
+  /* Grid container: */
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  justify-items: center;
+  /* Text appearance: */
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+@media screen and (min-width: 768px) {
+  .page {
+    padding-top: 45px;
+    padding-bottom: 50px;
+  }
+}

@@ -1,0 +1,26 @@
+.profile {
+  padding: 15px 0;
+  /* Grid container: */
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  row-gap: 20px;
+}
+
+@media screen and (min-width: 667px) {
+  .profile {
+    /* Grid container: */
+    grid-template: repeat(2, 60px) / 120px 1fr 150px;
+    grid-template-areas:
+      'figure controlPanel addButton'
+      'figure about addButton';
+    gap: 0 20px;
+    justify-items: initial;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .profile {
+    column-gap: 30px;
+  }
+}
