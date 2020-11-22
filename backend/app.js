@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(cors({
-  origin: /^https?:\/{2}(w{3}\.)?mesto.ered.students.nomoreparties.co$/,
+  origin: /^https?:\/{2}(w{3}\.)?mesto\.ered\.students\.nomoreparties\.co\//,
   optionsSuccessStatus: 200
 }));
 // unprotected routes:
