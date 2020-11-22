@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { RegisteredUserContext } from '../contexts/RegisteredUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function SignWithForm({ pageType, onSubmit }) {
-  const registeredUser = React.useContext(RegisteredUserContext);
+  const currentUser = React.useContext(CurrentUserContext);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   React.useEffect(() => {
-    setEmail(registeredUser.email);
-    setPassword(registeredUser.password);
-  }, [registeredUser]);
+    setEmail(currentUser.email);
+    setPassword(currentUser.password);
+  }, [currentUser]);
 
   // Handlers:
   const handleEmailInput = (event) => {

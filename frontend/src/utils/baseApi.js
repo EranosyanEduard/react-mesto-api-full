@@ -1,6 +1,6 @@
 /** @module ../utils/baseApi.js */
 
-import { baseApiData } from './utils.js';
+import { apiData } from './utils.js';
 
 /** Class representing the base api. */
 class BaseApi {
@@ -10,15 +10,15 @@ class BaseApi {
   }
 
   _getUserInfo() {
-    return fetch(`${ this._url }/users/me`, { headers: this._headers });
+    return fetch(`${this._url}/users/me`, { headers: this._headers });
   }
 
   _getCardList() {
-    return fetch(`${ this._url }/cards`, { headers: this._headers });
+    return fetch(`${this._url}/cards`, { headers: this._headers });
   }
 
   _patchUserInfo({ name, about }) {
-    return fetch(`${ this._url }/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({ name, about })
@@ -26,7 +26,7 @@ class BaseApi {
   }
 
   _postNewCard({ name, link }) {
-    return fetch(`${ this._url }/cards`, {
+    return fetch(`${this._url}/cards`, {
       method: 'POST',
       headers: this._headers,
       body: JSON.stringify({ name, link })
@@ -34,25 +34,25 @@ class BaseApi {
   }
 
   _deleteCard(cardId) {
-    return fetch(`${ this._url }/cards/${ cardId }`, {
+    return fetch(`${this._url}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers
     });
   }
 
   _toggleLikeCard(cardId, methodName) {
-    return fetch(`${ this._url }/cards/likes/${ cardId }`, {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: methodName,
       headers: this._headers
     });
   }
 
   _patchUserpic(userpicLink) {
-    return fetch(`${ this._url }/users/me/avatar`, {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        avatar: userpicLink
+        link: userpicLink
       })
     });
   }
@@ -63,7 +63,7 @@ class BaseApi {
         if (response.ok) {
           return response.json();
         }
-        return Promise.reject(`${ response.status } ${ response.statusText }`);
+        return Promise.reject(`${response.status} ${response.statusText}`);
       })
       .then(handleResponse)
   }
@@ -112,4 +112,4 @@ class BaseApi {
   }
 }
 
-export default new BaseApi(baseApiData);
+export default new BaseApi(apiData);

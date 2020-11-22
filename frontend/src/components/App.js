@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { RegisteredUserContext } from '../contexts/RegisteredUserContext';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import authApi from '../utils/authApi';
 import baseApi from '../utils/baseApi';
@@ -18,10 +17,6 @@ function App() {
   // [State variables]
   // Variables for the authApi:
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [registeredUser, setRegisteredUser] = React.useState({
-    email: '',
-    password: ''
-  });
   const [userLogin, setUserLogin] = React.useState(null);
   const [isOpenTooltipFailure, setIsOpenTooltipFailure] = React.useState(false);
   const [isOpenTooltipSuccess, setIsOpenTooltipSuccess] = React.useState(false);
@@ -68,7 +63,7 @@ function App() {
   const registerUser = (newUserInfo) => {
     authApi
       .registerUser(newUserInfo, () => {
-        setRegisteredUser(newUserInfo);
+        setCurrentUser(newUserInfo);
         setIsOpenTooltipSuccess(true);
       })
       .catch((response) => {
@@ -218,7 +213,7 @@ function App() {
 
   React.useEffect(() => {
     authApi
-      .checkToken(({ data }) => {
+      .checkToken((user) => {
         baseApi
           .getUserInfo(setCurrentUser)
           .catch((statusInfo) => {
@@ -229,7 +224,7 @@ function App() {
           .catch((statusInfo) => {
             handleBaseApiError('getCardList', statusInfo);
           });
-        setUserLogin(data.email);
+        setUserLogin(user.email);
         setLoggedIn(true);
         history.push('/');
       })
@@ -245,26 +240,24 @@ function App() {
   }, [loggedIn, history]);
 
   return (
-    <RegisteredUserContext.Provider value={registeredUser}>
-      <CurrentUserContext.Provider value={currentUser}>
-        <Switch>
-          <Route exact path="/sign-in">
-            <AuthPage {...authPageTypeLoginProps} />
-          </Route>
-          <Route exact path="/sign-up">
-            <AuthPage {...authPageTypeRegisterProps} />
-          </Route>
-          <ProtectedRoute
-            exact
-            path="/"
-            loggedIn={loggedIn}
-            component={HomePage}
-            {...homePageProps}
-          />
-          <ProtectedRoute path="*" loggedIn={false} />
-        </Switch>
-      </CurrentUserContext.Provider>
-    </RegisteredUserContext.Provider>
+    <CurrentUserContext.Provider value={currentUser}>
+      <Switch>
+        <Route exact path="/sign-in">
+          <AuthPage {...authPageTypeLoginProps} />
+        </Route>
+        <Route exact path="/sign-up">
+          <AuthPage {...authPageTypeRegisterProps} />
+        </Route>
+        <ProtectedRoute
+          exact
+          path="/"
+          loggedIn={loggedIn}
+          component={HomePage}
+          {...homePageProps}
+        />
+        <ProtectedRoute path="*" loggedIn={false} />
+      </Switch>
+    </CurrentUserContext.Provider>
   );
 }
 

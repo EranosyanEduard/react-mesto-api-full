@@ -1,6 +1,6 @@
 /** @module ../utils/authApi.js */
 
-import { authApiData } from './utils';
+import { apiData } from './utils';
 
 /** Class representing the auth api. */
 class AuthApi {
@@ -10,7 +10,7 @@ class AuthApi {
   }
 
   _postUserInfo(resourceName, { email, password }) {
-    return fetch(`${ this._url }/${ resourceName }`, {
+    return fetch(`${this._url}/${resourceName}`, {
       method: 'POST',
       headers: { ...this._headers },
       body: JSON.stringify({ email, password })
@@ -18,10 +18,10 @@ class AuthApi {
   }
 
   _getUserInfo(token) {
-    return fetch(`${ this._url }/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       headers: {
         ...this._headers,
-        Authorization: `Bearer ${ token }`
+        Authorization: `Bearer ${token}`
       }
     });
   }
@@ -59,4 +59,4 @@ class AuthApi {
   }
 }
 
-export default new AuthApi(authApiData);
+export default new AuthApi(apiData);
