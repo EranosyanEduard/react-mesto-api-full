@@ -26,8 +26,12 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.use((request,response,next)=>{
-  console.log(request.origin);
+app.use((request, response, next) => {
+  const { origin } = request;
+  const addressPattern = /^https?:\/{2}(w{3}\.)?mesto.ered.students.nomoreparties.co$/;
+  if (addressPattern.test(origin)) {
+    response.header('Access-Control-Allow-Origin', origin);
+  }
   next();
 });
 // unprotected routes:
