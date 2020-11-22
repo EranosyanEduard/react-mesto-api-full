@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const celebrate = require('celebrate');
+const cors = require('cors');
 const dotenv = require('dotenv');
 const { createUser, login } = require('./controllers/users');
 const { NotFoundError } = require('./errors/errors');
@@ -26,14 +27,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.use((request, response, next) => {
-  const { origin } = request;
-  const addressPattern = /^https?:\/{2}(w{3}\.)?mesto.ered.students.nomoreparties.co$/;
-  if (addressPattern.test(origin)) {
-    response.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
+app.use(cors({
+  origin: /^https?:\/{2}(w{3}\.)?mesto.ered.students.nomoreparties.co$/,
+  optionsSuccessStatus: 200
+}));
 // unprotected routes:
 app.post('/signin', celebrateUserLogin(), login);
 app.post('/signup', celebrateUserCreation(), createUser);
