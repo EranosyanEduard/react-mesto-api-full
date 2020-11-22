@@ -26,7 +26,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-
+app.use((request,response,next)=>{
+  console.log(request.origin);
+  next();
+});
 // unprotected routes:
 app.post('/signin', celebrateUserLogin(), login);
 app.post('/signup', celebrateUserCreation(), createUser);
