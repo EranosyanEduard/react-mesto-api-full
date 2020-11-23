@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(cors());
 app.use((request, response, next) => {
-  const { origin } = request.headers;
+  const origin = request.get('origin');
   const addressPattern = /^https?:\/{2}(w{3}\.)?mesto\.ered\.students\.nomoreparties\.co/;
   if (addressPattern.test(origin)) {
     response.header('Access-Control-Allow-Origin', origin);

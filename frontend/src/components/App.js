@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import authApi from '../utils/authApi';
-import baseApi from '../utils/baseApi';
+import appApi from '../utils/appApi';
 import ProtectedRoute from './ProtectedRoute';
 import AuthPage from './AuthPage';
 import HomePage from './HomePage';
@@ -15,12 +14,10 @@ import HomePage from './HomePage';
 function App() {
   const history = useHistory();
   // [State variables]
-  // Variables for the authApi:
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userLogin, setUserLogin] = React.useState(null);
   const [isOpenTooltipFailure, setIsOpenTooltipFailure] = React.useState(false);
   const [isOpenTooltipSuccess, setIsOpenTooltipSuccess] = React.useState(false);
-  // Variables for the baseApi:
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [selectedCard, setSelectedCard] = React.useState(null);
@@ -38,8 +35,9 @@ function App() {
     setIsOpenPopupCardInfo(false);
     setSelectedCard(null);
   };
-  const handleBaseApiError = (apiName, statusInfo) => {
-    console.error(`BaseApi.${apiName} response status: ${statusInfo}`);
+  const handleBaseApiError = (apiName, response) => {
+    const responseStatus = `${response.status} ${response.statusText}`;
+    console.error(`Base appApi.${apiName} response status: ${responseStatus}`);
   };
   // AuthPage component handlers:
   const handleAuthError = (errorMessage, errorCode) => {
@@ -47,7 +45,7 @@ function App() {
     console.error(errorMessage[errorCode] || 'Неизвестная ошибка');
   };
   const authorizeUser = (userInfo) => {
-    authApi
+    appApi
       .authorizeUser(userInfo, ({ token }) => {
         localStorage.setItem('jwt', token);
         setIsOpenTooltipSuccess(true);
@@ -61,7 +59,7 @@ function App() {
       });
   };
   const registerUser = (newUserInfo) => {
-    authApi
+    appApi
       .registerUser(newUserInfo, () => {
         setCurrentUser(newUserInfo);
         setIsOpenTooltipSuccess(true);
@@ -77,47 +75,47 @@ function App() {
   const toggleLikeCard = ({ likes, _id: cardId }, userId) => {
     const hasLike = likes.some((user) => user._id === userId);
     const httpMethod = hasLike ? 'DELETE' : 'PUT';
-    baseApi
+    appApi
       .toggleLikeCard(cardId, httpMethod, (updatedCard) => {
         const mappedCards = cards.map((card) => (
           card._id === updatedCard._id ? updatedCard : card
         ));
         setCards(mappedCards);
       })
-      .catch((statusInfo) => {
-        handleBaseApiError('toggleLikeCard', statusInfo);
+      .catch((response) => {
+        handleBaseApiError('toggleLikeCard', response);
       });
   };
   const removeCard = (cardId) => {
-    baseApi
+    appApi
       .removeCard(cardId, () => {
         setCards(cards.filter(({ _id }) => _id !== cardId));
       })
-      .catch((statusInfo) => {
-        handleBaseApiError('removeCard', statusInfo);
+      .catch((response) => {
+        handleBaseApiError('removeCard', response);
       });
   };
   const updateUserInfo = (userInfo) => {
-    baseApi
+    appApi
       .setUserInfo(userInfo, setCurrentUser)
-      .catch((statusInfo) => {
-        handleBaseApiError('setUserInfo', statusInfo);
+      .catch((response) => {
+        handleBaseApiError('setUserInfo', response);
       });
   };
   const addCard = (cardInfo) => {
-    baseApi
+    appApi
       .addCard(cardInfo, (newCard) => {
         setCards(cards.concat(newCard));
       })
-      .catch((statusInfo) => {
-        handleBaseApiError('addCard', statusInfo);
+      .catch((response) => {
+        handleBaseApiError('addCard', response);
       });
   };
   const updateUserpic = (userpicLink) => {
-    baseApi
+    appApi
       .setUserpic(userpicLink, setCurrentUser)
-      .catch((statusInfo) => {
-        handleBaseApiError('setUserpic', statusInfo);
+      .catch((response) => {
+        handleBaseApiError('setUserpic', response);
       });
   };
 
@@ -212,17 +210,17 @@ function App() {
   };
 
   React.useEffect(() => {
-    authApi
+    appApi
       .checkToken((user) => {
-        baseApi
+        appApi
           .getUserInfo(setCurrentUser)
-          .catch((statusInfo) => {
-            handleBaseApiError('getUserInfo', statusInfo);
+          .catch((response) => {
+            handleBaseApiError('getUserInfo', response);
           });
-        baseApi
+        appApi
           .getCardList(setCards)
-          .catch((statusInfo) => {
-            handleBaseApiError('getCardList', statusInfo);
+          .catch((response) => {
+            handleBaseApiError('getCardList', response);
           });
         setUserLogin(user.email);
         setLoggedIn(true);
