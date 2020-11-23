@@ -28,6 +28,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(cors());
+app.use((request, response, next) => {
+  const { origin } = request.headers;
+  const addressPattern = /^https?:\/{2}(w{3}\.)?mesto\.ered\.students\.nomoreparties\.co/;
+  if (addressPattern.test(origin)) {
+    response.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
 
 // unprotected routes:
 app.post('/signin', celebrateUserLogin(), login);
