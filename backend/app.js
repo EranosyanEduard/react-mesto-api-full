@@ -27,10 +27,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
-app.use(cors({
-  origin: /^https?:\/{2}(w{3}\.)?mesto\.ered\.students\.nomoreparties\.co\/?/,
-  optionsSuccessStatus: 200
-}));
+app.use(cors());
+
 // unprotected routes:
 app.post('/signin', celebrateUserLogin(), login);
 app.post('/signup', celebrateUserCreation(), createUser);
