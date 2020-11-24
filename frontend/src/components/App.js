@@ -128,7 +128,7 @@ function App() {
   const authPageTypeLoginProps = {
     pageType: 'login',
     onRedirectButton() {
-      history.push('/sign-up');
+      history.push('/signup');
     },
     onSubmit: authorizeUser,
     tooltipTypeFailureProps,
@@ -143,7 +143,7 @@ function App() {
   const authPageTypeRegisterProps = {
     pageType: 'register',
     onRedirectButton() {
-      history.push('/sign-in');
+      history.push('/signin');
     },
     onSubmit: registerUser,
     tooltipTypeFailureProps,
@@ -151,7 +151,7 @@ function App() {
       isOpen: isOpenTooltipSuccess,
       onClose() {
         closeAllPopups();
-        history.push('/sign-in');
+        history.push('/signin');
       }
     }
   };
@@ -163,7 +163,7 @@ function App() {
         setLoggedIn(false);
         setUserLogin(null);
         localStorage.removeItem('jwt');
-        history.push('/sign-in');
+        history.push('/signin');
       },
       userLogin
     },
