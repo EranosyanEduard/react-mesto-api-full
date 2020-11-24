@@ -11,7 +11,8 @@ const celebrateUserCreation = () => (
           .email(),
         password: Joi
           .string()
-          .required(),
+          .required()
+          .token(),
         name: Joi
           .string()
           .min(2)
@@ -113,7 +114,7 @@ const celebrateCardStateChanging = () => (
       .keys({
         cardId: Joi
           .string()
-          .alphanum()
+          .hex()
           .length(24)
       })
   })

@@ -1,82 +1,85 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { NotFoundError } = require('../errors/errors');
+const { DuplicateKeyError, NotFoundError } = require('../errors/errors');
 
-const createUser = (request, response, next) => {
-  const { password, link, ...otherProps } = request.body;
+const createUser = (req, res, next) => {
+  const { password, link, ...otherProps } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) => User.create({
-      password: hash,
-      avatar: link,
-      ...otherProps
-    }))
+    .then((hash) => (
+      User.create({
+        password: hash,
+        avatar: link,
+        ...otherProps
+      })
+        .then((user) => user)
+        .catch(() => (
+          Promise.reject(new DuplicateKeyError('Пользователь уже зарегистрирован!'))
+        ))
+    ))
     .then((user) => User.findById(user._id))
     .then((user) => {
-      response.send(user);
+      res.send(user);
     })
     .catch(next);
 };
 
-const getCurrentUser = (request, response, next) => {
-  User.findById(request.user._id)
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
     .orFail(() => new NotFoundError('Пользователь не найден!'))
     .then((user) => {
-      response.send(user);
+      res.send(user);
     })
     .catch(next);
 };
 
-const getUsers = (_, response, next) => {
+const getUsers = (_, res, next) => {
   User.find({})
     .then((users) => {
-      response.send(users);
+      res.send(users);
     })
     .catch(next);
 };
 
-const login = (request, response, next) => {
-  User.findUserByCredentials(request.body)
+const login = (req, res, next) => {
+  User.findUserByCredentials(req.body)
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
         process.env.JWT_SECRET_KEY,
         { expiresIn: '7d' }
       );
-      response.send({ token });
+      res.send({ token });
     })
     .catch(next);
 };
 
-const handleUpdateUser = (userId, updateObject, response) => (
+const handleUpdateUser = (userId, updateObject, res) => (
   User.findByIdAndUpdate(userId, updateObject, {
     new: true,
     runValidators: true
   })
     .orFail(() => new NotFoundError('Пользователь не найден!'))
     .then((user) => {
-      response.send(user);
+      res.send(user);
     })
 );
 
-const updateAvatar = (request, response, next) => {
+const updateAvatar = (req, res, next) => {
   handleUpdateUser(
-    request.user._id,
-    { avatar: request.body.link },
-    response
+    req.user._id,
+    { avatar: req.body.link },
+    res
   )
     .catch(next);
 };
 
-const updateUser = (request, response, next) => {
-  const { name, about } = request.body;
+const updateUser = (req, res, next) => {
+  const { name, about } = req.body;
   handleUpdateUser(
-    request.user._id,
-    {
-      name,
-      about
-    },
-    response
+    req.user._id,
+    { name, about },
+    res
   )
     .catch(next);
 };

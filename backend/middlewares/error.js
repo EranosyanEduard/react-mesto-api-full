@@ -1,9 +1,9 @@
-const errorGeneralHandler = (error, request, response, _) => {
-  const { message, name, statusCode = 500 } = error;
+function errorGeneralHandler(err, req, res, _) {
+  const { message, name, statusCode = 500 } = err;
   const errorMessage = (statusCode !== 500)
     ? message
     : 'На сервере произошла непредвиденная ошибка!';
-  response
+  res
     .status(statusCode)
     .send({
       errorName: name,

@@ -28,15 +28,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 app.use(cors());
-app.use((request, response, next) => {
-  const origin = request.get('origin');
-  const addressPattern = /^https?:\/{2}(w{3}\.)?mesto\.ered\.students\.nomoreparties\.co/;
-  if (addressPattern.test(origin)) {
-    response.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
+app.use(require('./middlewares/url-address'));
 
+// test routes:
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 // unprotected routes:
 app.post('/signin', celebrateUserLogin(), login);
 app.post('/signup', celebrateUserCreation(), createUser);
@@ -51,8 +50,8 @@ app.all('*', (req, res, next) => {
 
 app.use(errorLogger);
 
+// error handlers:
 app.use(celebrate.errors());
-// error general handler:
 app.use(require('./middlewares/error'));
 
 app.listen(PORT, () => {

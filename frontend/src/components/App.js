@@ -240,10 +240,10 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Switch>
-        <Route exact path="/sign-in">
+        <Route exact path="/signin">
           <AuthPage {...authPageTypeLoginProps} />
         </Route>
-        <Route exact path="/sign-up">
+        <Route exact path="/signup">
           <AuthPage {...authPageTypeRegisterProps} />
         </Route>
         <ProtectedRoute

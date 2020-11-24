@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require('../errors/errors');
 
-function authorizeUser(request, response, next) {
-  const { authorization } = request.headers;
+function authorizeUser(req, _, next) {
+  const { authorization } = req.headers;
   const tokenSchemePattern = /^Bearer /;
   const authorizationError = new UnauthorizedError('Ошибка авторизации!');
   if (!tokenSchemePattern.test(authorization)) {
@@ -17,7 +17,7 @@ function authorizeUser(request, response, next) {
     next(authorizationError);
     return;
   }
-  request.user = payload;
+  req.user = payload;
   next();
 }
 

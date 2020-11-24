@@ -1,29 +1,29 @@
 const Card = require('../models/card');
 const { ForbiddenError, NotFoundError } = require('../errors/errors');
 
-const createCard = (request, response, next) => {
-  const { body, user } = request;
+const createCard = (req, res, next) => {
+  const { body, user } = req;
   Card.create({
     ...body,
     owner: user._id
   })
     .then((card) => {
-      response.send(card);
+      res.send(card);
     })
     .catch(next);
 };
 
-const getCards = (_, response, next) => {
+const getCards = (_, res, next) => {
   Card.find({})
     .populate(['owner', 'likes'])
     .then((cards) => {
-      response.send(cards);
+      res.send(cards);
     })
     .catch(next);
 };
 
-const removeCard = (request, response, next) => {
-  const { params, user } = request;
+const removeCard = (req, res, next) => {
+  const { params, user } = req;
   Card.findById(params.cardId)
     .orFail(() => new NotFoundError('Карточка не найдена!'))
     .populate(['owner', 'likes'])
@@ -37,29 +37,29 @@ const removeCard = (request, response, next) => {
       return Promise.reject(new ForbiddenError(errorMessage));
     })
     .then((card) => {
-      response.send(card);
+      res.send(card);
     })
     .catch(next);
 };
 
-const handleLike = (cardId, updateObject, response) => (
+const handleLike = (cardId, updateObject, res) => (
   Card.findByIdAndUpdate(cardId, updateObject, { new: true })
     .orFail(() => new NotFoundError('Карточка не найдена!'))
     .populate(['owner', 'likes'])
     .then((card) => {
-      response.send(card);
+      res.send(card);
     })
 );
 
-const dislikeCard = (request, response, next) => {
-  const updateObject = { $pull: { likes: request.user._id } };
-  handleLike(request.params.cardId, updateObject, response)
+const dislikeCard = (req, res, next) => {
+  const updateObject = { $pull: { likes: req.user._id } };
+  handleLike(req.params.cardId, updateObject, res)
     .catch(next);
 };
 
-const likeCard = (request, response, next) => {
-  const updateObject = { $addToSet: { likes: request.user._id } };
-  handleLike(request.params.cardId, updateObject, response)
+const likeCard = (req, res, next) => {
+  const updateObject = { $addToSet: { likes: req.user._id } };
+  handleLike(req.params.cardId, updateObject, res)
     .catch(next);
 };
 
