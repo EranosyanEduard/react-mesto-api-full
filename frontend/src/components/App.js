@@ -128,7 +128,7 @@ function App() {
   const authPageTypeLoginProps = {
     pageType: 'login',
     onRedirectButton() {
-      history.push('/signup');
+      history.push('/sign-up');
     },
     onSubmit: authorizeUser,
     tooltipTypeFailureProps,
@@ -143,7 +143,7 @@ function App() {
   const authPageTypeRegisterProps = {
     pageType: 'register',
     onRedirectButton() {
-      history.push('/signin');
+      history.push('/sign-in');
     },
     onSubmit: registerUser,
     tooltipTypeFailureProps,
@@ -151,7 +151,7 @@ function App() {
       isOpen: isOpenTooltipSuccess,
       onClose() {
         closeAllPopups();
-        history.push('/signin');
+        history.push('/sign-in');
       }
     }
   };
@@ -163,7 +163,7 @@ function App() {
         setLoggedIn(false);
         setUserLogin(null);
         localStorage.removeItem('jwt');
-        history.push('/signin');
+        history.push('/sign-in');
       },
       userLogin
     },
@@ -240,10 +240,10 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Switch>
-        <Route exact path="/signin">
+        <Route exact path="/sign-in">
           <AuthPage {...authPageTypeLoginProps} />
         </Route>
-        <Route exact path="/signup">
+        <Route exact path="/sign-up">
           <AuthPage {...authPageTypeRegisterProps} />
         </Route>
         <ProtectedRoute
