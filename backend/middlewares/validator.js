@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const urlPattern = /^https?:\/{2}(w{3}\.)?([a-z\d][\w-]+\.)+[a-z]+(\/.+)*$/;
 
 const celebrateUserCreation = () => (
   celebrate({
@@ -23,7 +24,7 @@ const celebrateUserCreation = () => (
           .max(30),
         link: Joi
           .string()
-          .uri()
+          .pattern(urlPattern)
       })
   })
 );
@@ -84,7 +85,7 @@ const celebrateAvatarUpdate = () => (
         link: Joi
           .string()
           .required()
-          .uri()
+          .pattern(urlPattern)
       })
   })
 );
@@ -102,7 +103,7 @@ const celebrateCardCreation = () => (
         link: Joi
           .string()
           .required()
-          .uri()
+          .pattern(urlPattern)
       })
   })
 );
